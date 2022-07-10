@@ -1,5 +1,3 @@
-import javax.sound.midi.SysexMessage;
-import java.io.*;
 import java.util.*;
 
 public class Main {
@@ -8,15 +6,12 @@ public class Main {
     static int N;
 
     public static void main(String[] args) {
-        //BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
         Scanner s = new Scanner(System.in);
         D0 = new int[41];
         D1 = new int[41];
 
-        D0[0] = 1;
-        D1[0] = 0;
-        D0[1] = 0;
-        D1[1] = 1;
+        D0[0] = 1; D0[1] = 0;
+        D1[0] = 0; D1[1] = 1;
 
         int T = s.nextInt();
         for(int i = 0; i < T; i++) {
