@@ -6,10 +6,9 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
+        sieveOfEratosthenes(10000);
 
         int T = s.nextInt();
-
-        sieveOfEratosthenes(10000);
 
         for(int i = 0; i < T; i++) {
             int n = s.nextInt();
@@ -18,17 +17,12 @@ public class Main {
     }
 
     static void goldbach(int n) {
-        int[] answer = new int[2];
-
-        for(int i = 2; i <= n/2; i++) {
+        for(int i = n/2; i >= 2; i--) {
             if (isPrime[i] && isPrime[n - i]) {
-                if (answer[0] == 0 || answer[1] - answer[0] > n - 2 * i) {
-                    answer[0] = i;
-                    answer[1] = n - i;
-                }
+                System.out.println(i + " " + (n-i));
+                break;
             }
         }
-        System.out.println(answer[0] + " " + answer[1]);
     }
 
     static void sieveOfEratosthenes(int n) {
