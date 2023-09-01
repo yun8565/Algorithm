@@ -2,44 +2,27 @@ import java.util.*;
 
 public class Main {
 
-    static List<String> tuple = new ArrayList<>();
-    static String[] mbti;
-    static int min, N;
-
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
 
         int T = s.nextInt();
 
         for(int i = 0; i < T; i++) {
-            N = s.nextInt();
-            mbti = new String[N];
-            min = Integer.MAX_VALUE;
-            tuple.clear();
+            int N = s.nextInt();
+            String[] mbti = new String[N];
+            int min = Integer.MAX_VALUE;
 
             for(int j = 0; j < N; j++)
                 mbti[j] = s.next();
 
-            if(N >= 33) {
+            if(N >= 33)
                 System.out.println(0);
-                continue;
-            }
-
-            dfs(0, 0);
-            System.out.println(min);
-        }
-    }
-
-    static void dfs(int k, int depth) {
-        if (depth == 3) {
-            int score = getScore(tuple.get(0), tuple.get(1), tuple.get(2));
-            min = Math.min(min, score);
-        }
-        else {
-            for (int i = k; i < N; i++) {
-                tuple.add(mbti[i]);
-                dfs(i + 1, depth + 1);
-                tuple.remove(tuple.size() - 1);
+            else {
+                for(int k = 0; k < N; k++)
+                    for(int kk = k+1; kk < N; kk++)
+                        for(int kkk = kk+1; kkk < N; kkk++)
+                            min = Math.min(min, getScore(mbti[k], mbti[kk], mbti[kkk]));
+                System.out.println(min);
             }
         }
     }
