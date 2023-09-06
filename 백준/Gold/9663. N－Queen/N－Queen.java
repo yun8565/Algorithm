@@ -1,9 +1,7 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
 
 public class Main {
+
     static int[] col;
     static int n, count = 0;
 
@@ -17,30 +15,24 @@ public class Main {
         System.out.print(count);
     }
 
-    // 서로 공격할 수 있는 위치가 아닌가? 배치할 수 있는가?
-    public static boolean promising(int i){
-        int k = 1;
-        boolean flag = true;
-        while(k < i && flag){
-            if((col[i] == col[k]) || (Math.abs(col[i] - col[k]) == i - k))
-                flag = false;
-            k++;
-        }
-        return flag;
-    }
-
-    // 퀸 배치 함수
-    public static void queens(int i){
-        int j;
-        if(promising(i)){
+    static void queens(int i) {
+        if(promising(i)) {
             if(i == n)
                 count++;
-            else
-                for(j = 1; j <= n; j++) {
+            else {
+                for (int j = 1; j <= n; j++) {
                     col[i + 1] = j;
-                    queens(i+1);
+                    queens(i + 1);
                 }
+            }
         }
     }
 
+    static boolean promising(int i) {
+        for(int k = 1; k < i; k++) {
+            if((col[i] == col[k]) || (Math.abs(col[i] - col[k]) == i - k))
+                return false;
+        }
+        return true;
+    }
 }
