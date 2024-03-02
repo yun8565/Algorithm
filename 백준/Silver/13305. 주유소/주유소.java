@@ -16,20 +16,13 @@ public class Main {
         for(int i = 1; i <= N; i++)
             cost[i] = s.nextInt();
 
-        int cur = 1;
-        int total = 0;
-        int minCost = cost[1];
+        long total = 0;
+        long minCost = cost[1];
 
-        while(cur < N) {
-            int next = cur+1;
-            int curDist = dist[cur];
-            while(next < N && minCost < cost[next]) {
-                curDist += dist[next];
-                next++;
-            }
-            minCost = next;
-            total += cost[cur] * curDist;
-            cur = next;
+        for(int i = 1; i < N; i++) {
+            if(cost[i] < minCost)
+                minCost = cost[i];
+            total += minCost * dist[i];
         }
         System.out.println(total);
     }
