@@ -15,7 +15,7 @@ public class Main {
         for(int i = 1; i <= N; i++) {
             dp[i] = card[i];
             for(int k = 1; k < i; k++)
-                dp[i] = Math.min(dp[i], dp[i-k] + card[k]);
+                dp[i] = Math.min(dp[i], dp[i-k] + dp[k]);
         }
 
         System.out.println(dp[N]);
