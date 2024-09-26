@@ -1,76 +1,69 @@
 import java.io.*;
 import java.util.*;
 
-class tomato {
-    int x; // 세로
-    int y; // 가로
-
-    tomato(int x, int y) {
-        this.x = x; // 세로
-        this.y = y; // 가로
-    }
-}
-
 public class Main {
-    static int M; // 가로
-    static int N; // 세로
 
-    static int[] dx = { -1, 1, 0, 0 }; // 상하좌우위아래
-    static int[] dy = { 0, 0, -1, 1 }; // 상하좌우위아래
+    static int[][] map;
+    static int[][] dir = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+    static int N,M, day = 0;
+    static Queue<Pair> q = new LinkedList<>();
 
-    static int[][] box;
-    static Queue<tomato> que;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        M = sc.nextInt(); // 가로
-        N = sc.nextInt(); // 세로
+        String[] NM = br.readLine().split(" ");
+        M = Integer.parseInt(NM[0]);
+        N = Integer.parseInt(NM[1]);
 
-        box = new int[N][M]; // 토마토판
-        que = new LinkedList<tomato>();
+        map = new int[N][M];
 
-        // 토마토판 입력
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                box[i][j] = sc.nextInt();
-                if (box[i][j] == 1)
-                    que.add(new tomato(i, j));
+        for(int i = 0; i < N; i++) {
+            String[] input = br.readLine().split(" ");
+            for(int j = 0; j < M; j++) {
+                int num = Integer.parseInt(input[j]);
+                if(num == 1)
+                    q.add(new Pair(i, j));
+                map[i][j] = num;
             }
         }
-        System.out.println(bfs());
+
+        bfs();
+        System.out.println(isOver() ? day : -1);
     }
 
-    public static int bfs() {
-        while (!que.isEmpty()) {
-            tomato t = que.remove();
+    static void bfs() {
+        while(!q.isEmpty()) {
+            Pair cur = q.poll();
 
-            int x = t.x;
-            int y = t.y;
+            for(int i = 0; i < 4; i++) {
+                int nx = cur.x + dir[i][0];
+                int ny = cur.y + dir[i][1];
 
-            for (int i = 0; i < 4; i++) {
-                int nx = x + dx[i];
-                int ny = y + dy[i];
-
-                if (nx >= 0 && ny >= 0 && nx < N && ny < M) {
-                    if (box[nx][ny] == 0) {
-                        que.add(new tomato(nx, ny));
-                        box[nx][ny] = box[x][y] + 1; //날짜 업데이트
-                    }
+                if(canGo(nx,ny) && map[nx][ny] == 0) {
+                    map[nx][ny] = map[cur.x][cur.y] + 1;
+                    q.add(new Pair(nx,ny));
                 }
             }
         }
-        int result = Integer.MIN_VALUE;
+        day = Arrays.stream(map)
+                .flatMapToInt(Arrays::stream)
+                .max().orElse(0)-1;
+    }
 
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < M; j++) {
-                if (box[i][j] == 0)
-                    return -1;
-                result = Math.max(result, box[i][j]);
-            }
+    static boolean isOver() {
+        return Arrays.stream(map).flatMapToInt(Arrays::stream)
+                .allMatch(tomato -> tomato!=0);
+    }
+
+    static boolean canGo(int x, int y) {
+        return x >= 0 && x < N && y >= 0 && y < M;
+    }
+
+    static class Pair {
+        int x,y;
+        public Pair(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
-        if (result == 1)
-            return 0;
-        else
-            return result-1;
     }
 }
