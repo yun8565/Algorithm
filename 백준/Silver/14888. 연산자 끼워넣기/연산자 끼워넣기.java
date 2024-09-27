@@ -22,13 +22,22 @@ public class Main {
 
     static int[] toArray(String input) {
         return Arrays.stream(input.split(" "))
-                .mapToInt(Integer::parseInt)
-                .toArray();
+                .mapToInt(Integer::parseInt).toArray();
     }
 
     static void dfs() {
         if(list.size() == N-1) {
-            int result = calculate();
+            int result = numbers[0];
+            for(int i = 1; i < N; i++) {
+                int num = numbers[i];
+                int op = list.get(i-1);
+                switch(op) {
+                    case 0 : result += num; break;
+                    case 1 : result -= num; break;
+                    case 2 : result *= num; break;
+                    case 3 : result /= num; break;
+                }
+            }
             min = Math.min(min, result);
             max = Math.max(max, result);
             return;
@@ -42,22 +51,5 @@ public class Main {
                 operators[i]++;
             }
         }
-    }
-
-    static int calculate() {
-        int result = numbers[0];
-        for(int i = 1; i < N; i++) {
-            int num = numbers[i];
-            int op = list.get(i-1);
-            if(op == 0)
-                result += num;
-            if(op == 1)
-                result -= num;
-            if(op == 2)
-                result *= num;
-            if(op == 3)
-                result /= num;
-        }
-        return result;
     }
 }
