@@ -1,57 +1,63 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    static int n;
-    static int arr[];
-    static int op[];
-    static int visited[];
-    static int max = Integer.MIN_VALUE;
-    static int min = Integer.MAX_VALUE;
 
-    // 같은 것이 있는 순열 -> (N-1)!/중복되는 연산자!
-    public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
+    static int N, min = Integer.MAX_VALUE, max = Integer.MIN_VALUE;
+    static int[] numbers;
+    static int[] operators;
+    static List<Integer> list = new ArrayList<>();
 
-        n = s.nextInt();
-        arr = new int[n];
-        op = new int[n-1];
-        visited = new int[n-1];
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        for(int i = 0; i < n; i++)
-            arr[i] = s.nextInt();
+        N = Integer.parseInt(br.readLine());
+        numbers = toArray(br.readLine());
+        operators = toArray(br.readLine());
 
-        //1덧셈 2뺄셈 3곱셈 4나눗셈
-        int index = 0;
-        for(int i = 0; i < 4; i++) {
-            int cnt = s.nextInt();
-            for(int j = 0; j < cnt; j++)
-                op[index++] = i;
-        }
-
-        dfs(0);
-
+        dfs();
         System.out.println(max);
         System.out.println(min);
     }
 
-    static void dfs(int r){
-        if(r == n-1){
-            int result = arr[0];
-            for(int i = 0; i < n-1; i++){
-                result = (visited[i] == 1) ? (result + arr[i+1]) : (visited[i] == 2) ? (result - arr[i+1]) :
-                        (visited[i] == 3) ? (result * arr[i+1]) : (result / arr[i+1]);
-            }
-            max =  Math.max(max, result);
-            min =  Math.min(min, result);
+    static int[] toArray(String input) {
+        return Arrays.stream(input.split(" "))
+                .mapToInt(Integer::parseInt)
+                .toArray();
+    }
+
+    static void dfs() {
+        if(list.size() == N-1) {
+            int result = calculate();
+            min = Math.min(min, result);
+            max = Math.max(max, result);
+            return;
         }
-        else{
-            for(int i = 0; i < n-1; i++){
-                if(visited[i] == 0){
-                    visited[i] = op[r]+1;
-                    dfs(r+1);
-                    visited[i] = 0;
-                }
+        for(int i = 0; i < 4; i++) {
+            if(operators[i] > 0) {
+                list.add(i);
+                operators[i]--;
+                dfs();
+                list.remove(list.size()-1);
+                operators[i]++;
             }
         }
+    }
+
+    static int calculate() {
+        int result = numbers[0];
+        for(int i = 1; i < N; i++) {
+            int num = numbers[i];
+            int op = list.get(i-1);
+            if(op == 0)
+                result += num;
+            if(op == 1)
+                result -= num;
+            if(op == 2)
+                result *= num;
+            if(op == 3)
+                result /= num;
+        }
+        return result;
     }
 }
