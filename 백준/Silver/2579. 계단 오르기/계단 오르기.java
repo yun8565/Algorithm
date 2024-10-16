@@ -1,37 +1,27 @@
-import java.util.*;
+import java.io.*;
 
 public class Main {
 
-    static int[] stair;
-    static int[] dp;
-    static int n;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
+        int N = Integer.parseInt(br.readLine());
 
-        n = s.nextInt();
-        stair = new int[n];
-        dp = new int[n];
+        int[] stairs = new int[N];
+        int[] dp = new int[N];
 
-        for(int i = 0; i < n; i++) {
-            stair[i] = s.nextInt();
+        for(int i = 0; i < N; i++)
+            stairs[i] = Integer.parseInt(br.readLine());
+
+        dp[0] = stairs[0];
+        if(N > 1)
+            dp[1] = stairs[0] + stairs[1];
+        if(N > 2) {
+            dp[2] = Math.max(stairs[0]+stairs[2], stairs[1]+stairs[2]);
+            for(int i = 3; i < N; i++){
+                dp[i] = Math.max(dp[i-3]+stairs[i-1]+stairs[i], dp[i-2]+stairs[i]);
+            }
         }
-        
-        dp[0] = stair[0];
-        if(n > 1)
-            dp[1] = stair[0] + stair[1];
-        if(n > 2) {
-            dp[2] = Math.max(stair[0]+stair[2], stair[1]+stair[2]);
-            go_upstairs();
-        }
-        System.out.println(dp[n-1]);
-    }
-
-    static void go_upstairs(){
-        for(int i = 3; i < n; i++){
-            dp[i] = Math.max(dp[i-3]+stair[i-1]+stair[i], dp[i-2]+stair[i]);
-        }
+        System.out.println(dp[N-1]);
     }
 }
-
-
