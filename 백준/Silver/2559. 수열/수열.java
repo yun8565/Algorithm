@@ -1,31 +1,29 @@
-import java.util.*;
+import java.io.*;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner s = new Scanner(System.in);
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int N = s.nextInt();
-        int K = s.nextInt();
-
-        int[] temperature = new int[N];
+        String[] input = br.readLine().split(" ");
+        int N = Integer.parseInt(input[0]);
+        int M = Integer.parseInt(input[1]);
         int sum = 0;
-        int max = 0, count = 1;
+        int[] temps = new int[N];
 
+        input = br.readLine().split(" ");
         for(int i = 0; i < N; i++) {
-            temperature[i] = s.nextInt();
+            temps[i] = Integer.parseInt(input[i]);
+            if(i < M)
+                sum += temps[i];
         }
 
-        for(int i = 0; i < K; i++)
-            sum += temperature[i];
-
-        max = sum;
-
-        for(int i = K; i < N; i++) {
-            sum += temperature[i] - temperature[i-K];
+        int max = sum;
+        for(int k = M; k < N; k++) {
+            sum -= temps[k-M];
+            sum += temps[k];
             max = Math.max(max, sum);
         }
-
         System.out.println(max);
     }
 }
