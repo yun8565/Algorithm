@@ -5,19 +5,18 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        String[] input = br.readLine().split(" ");
-        int N = Integer.parseInt(input[0]);
-        int M = Integer.parseInt(input[1]);
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
         int[] trees = new int[N];
 
-        input = br.readLine().split(" ");
-        for(int i = 0; i < N; i++)
-            trees[i] = Integer.parseInt(input[i]);
-        Arrays.sort(trees);
-
-        int left = 0, right = trees[trees.length - 1];
-        int minHeight = Integer.MAX_VALUE;
+        st = new StringTokenizer(br.readLine());
+        int left = 0, right = -1;
+        for(int i = 0; i < N; i++) {
+            trees[i] = Integer.parseInt(st.nextToken());
+            right = Math.max(right, trees[i]);
+        }
 
         while(left <= right) {
             int mid = (left + right) / 2;
@@ -26,13 +25,11 @@ public class Main {
             for(int h : trees)
                 sum += Math.max(h-mid, 0);
 
-            if(sum >= M) {
-                minHeight = mid;
+            if(sum >= M)
                 left = mid + 1;
-            }
             if(sum < M)
                 right = mid - 1;
         }
-        System.out.println(minHeight);
+        System.out.println(right);
     }
 }
